@@ -1,1 +1,2 @@
-# CAMEO-Python
+# Human In The Loop CAMEO
+Here's where I'll keep all important code for the Human In The Loop project. For now, I'm treating this more like a record of what I'm doing rather than as a resource for distributing the code.
