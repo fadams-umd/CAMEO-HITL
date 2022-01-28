@@ -5,17 +5,16 @@ from sklearn.manifold import spectral_embedding
 from sklearn.mixture import GaussianMixture
 from scipy.spatial import Voronoi
 from scipy.spatial.distance import pdist, squareform
-import ternary
+from ternary.helpers import project_sequence
 
 
-def phase_mapping_SC_with_GMM(X, S, num_clusters):
+def phase_mapping(X, num_clusters):
     '''
     Cluster data using spectral clustering and a Gaussian mixture model
 
     Parameters
     ----------
     X: m x n matrix - m rows of n dimensional data
-    S: m x m matrix - similarity matrix mask
     num_clusters: number of groups to cluster data into
 
     Returns
@@ -24,7 +23,7 @@ def phase_mapping_SC_with_GMM(X, S, num_clusters):
     cluster_prob: the probability for each sample to belong to each cluster
     '''
 
-    K = similarity_matrix(X, 'cosine') * S
+    K = similarity_matrix(X, 'cosine')
 
     if X.shape[0] <= num_clusters:
         # fewer data points than clusters, each point gets its own cluster
@@ -56,7 +55,7 @@ def composition_to_graph(T):
     '''
 
     N = T.shape[0]
-    XYc = np.array(list(zip(*ternary.helpers.project_sequence(T))))
+    XYc = np.array(list(zip(*project_sequence(T))))
     vor = Voronoi(XYc)
     points_separated = vor.ridge_points
     S = np.zeros((N, N))
