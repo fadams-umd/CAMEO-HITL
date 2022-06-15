@@ -6,3 +6,4 @@ applied_active_learning_191228a.py
 FeGaPd_full_data_220104a.mat
 logs/*
 .ipynb_checkpoints/*
+labels/*
