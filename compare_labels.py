@@ -101,6 +101,9 @@ for i in range(num_experiments):
         if tuple(cartesian[test_order[i], :]) in points:
             # the point was already measured by the control
             points[tuple(cartesian[test_order[i], :])] += f', {str(i+1)}'
+        else:
+            # the point hasn't been measured by the control
+            points[tuple(cartesian[test_order[i], :])] = f"{str(i+1)}'"
 
 tax.right_corner_label("$Fe_{0.4}Ga_{0.6}$", fontsize=14)
 tax.top_corner_label("$Fe_{0.4}Pd_{0.6}$", fontsize=14)
