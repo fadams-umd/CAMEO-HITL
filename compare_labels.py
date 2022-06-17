@@ -32,7 +32,7 @@ test_label = np.loadtxt(fname=f'labels/predicted_labels_{time_string}.txt',
 data = loadmat('FeGaPd_full_data_220104a.mat')
 
 # ...the "true" labels from the data set, and...
-true_label = data['labels_col'][0][0].flatten()
+true_label = data['labels_col'][0][1].flatten()
 
 # ...the composition data in cartesian coordinates
 composition = data['C']
