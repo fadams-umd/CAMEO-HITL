@@ -47,7 +47,7 @@ rng = np.random.RandomState(seed)
 tf.random.set_seed(seed)
 
 # experiment iteration number
-iteration = 10
+iteration = 20
 
 measured = auto_order[:iteration - 1]
 
@@ -58,16 +58,19 @@ similarity_matrix = np.exp(-(pairwise_distance**2) / (2 * 0.7**2))
 # perform spectral clustering
 num_clusters = 5
 
-spectral_clusters = spectral_embedding(adjacency=similarity_matrix,
-                                       n_components=num_clusters,
-                                       random_state=rng)
+if len(measured) <= num_clusters:
+    cluster_probabilities = np.eye(len(measured))
+else:
+    spectral_clusters = spectral_embedding(adjacency=similarity_matrix,
+                                           n_components=num_clusters,
+                                           random_state=rng)
 
-mixture_model = GaussianMixture(n_components=num_clusters,
-                                covariance_type='diag',
-                                n_init=10,
-                                random_state=rng).fit(spectral_clusters)
+    mixture_model = GaussianMixture(n_components=num_clusters,
+                                    covariance_type='diag',
+                                    n_init=10,
+                                    random_state=rng).fit(spectral_clusters)
 
-cluster_probabilities = mixture_model.predict_proba(spectral_clusters)
+    cluster_probabilities = mixture_model.predict_proba(spectral_clusters)
 
 labels = np.argmax(cluster_probabilities, axis=1).flatten()
 
@@ -86,12 +89,13 @@ user_labels = [1 if d > 0 else 0 for d in boundary_distance]
 user_kernel = gpflow.kernels.SquaredExponential(active_dims=[2],
                                                 lengthscales=0.001,
                                                 variance=0.1)
-gpflow.utilities.set_trainable(user_kernel.lengthscales, False)
-gpflow.utilities.set_trainable(user_kernel.variance, False)
 
 composition_kernel = gpflow.kernels.Matern32(active_dims=[0, 1],
                                              lengthscales=[0.2, 0.2],
-                                             variance=1)
+                                             variance=1.5)
+
+gpflow.utilities.set_trainable(user_kernel.lengthscales, False)
+gpflow.utilities.set_trainable(user_kernel.variance, False)
 gpflow.utilities.set_trainable(composition_kernel.variance, False)
 gpflow.utilities.set_trainable(composition_kernel.lengthscales, False)
 
@@ -136,8 +140,8 @@ def get_labels(composition_factor, user_input_factor):
 
 
 def compare_labels(composition_factor, user_input_factor):
-    control_fmi = fowlkes_mallows_score(
-        true_label, auto_label[iteration - 1, :])
+    control_fmi = fowlkes_mallows_score(true_label,
+                                        auto_label[iteration - 1, :])
 
     test_label = get_labels(composition_factor, user_input_factor)
     test_fmi = fowlkes_mallows_score(true_label, test_label)
