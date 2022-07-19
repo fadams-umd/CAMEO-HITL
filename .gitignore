@@ -8,3 +8,5 @@ logs/*
 .ipynb_checkpoints/*
 labels/*
 .vscode/*
+__pycache__/applied_active_learning_220608a.cpython-39.pyc
+applied_active_learning_220608a.py
