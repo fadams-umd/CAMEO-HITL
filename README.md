@@ -24,3 +24,6 @@ The [`hitl_environment.yml`](hitl_environment.yml) file can be used to create a 
 
 [`compare_labels.py`](compare_labels.py), [`compare_variance.py`](compare_variance.py), [`gpc_test.ipynb`](gpc_test.ipynb), and `autonomous_predicted_labels.txt` are all tests created over the course of the project.
 
+# Repository History
+The default branch of this repository is the `entropy` branch, named for the acquisition function used. For a time, a different acquisition was used for a portion of the project, until the `entropy` branch was created.
+
